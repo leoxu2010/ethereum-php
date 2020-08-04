@@ -49,7 +49,7 @@ class Signature
         $context = secp256k1_context_create(SECP256K1_CONTEXT_SIGN | SECP256K1_CONTEXT_VERIFY);
         /** @var resource $secpSignature */
         $secpSignature = '';
-        $recoveryId = $signature->slice(64)->getInt();
+        $recoveryId = $signature->slice(64)->getInt() - 27;
         secp256k1_ecdsa_recoverable_signature_parse_compact($context, $secpSignature, $signature->slice(0, 64)->getBinary(), $recoveryId);
         /** @var resource $secpPublicKey */
         $secpPublicKey = '';

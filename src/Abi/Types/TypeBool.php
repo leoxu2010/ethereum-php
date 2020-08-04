@@ -31,7 +31,7 @@ class TypeBool extends AbstractType implements TypeBoolInterface
      */
     public function serialize($data): string
     {
-        return $this->hexize($data);
+        return '000000000000000000000000000000000000000000000000000000000000000'.$this->hexize($data);
     }
 
     /**

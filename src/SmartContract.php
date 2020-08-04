@@ -136,7 +136,7 @@ class SmartContract
      * @return mixed
      * @throws Exception
      */
-    public function call(string $functionName, array $arguments, ?Uint $gasPrice = null)
+    public function call(string $functionName, array $arguments, ?Uint $gasPrice = null, ?Uint $value = null)
     {
         $function = $this->getFunction($functionName);
         $data     = Byte::initWithHex($function->getSignature() . $function->inputs->serialize($arguments));
@@ -144,7 +144,7 @@ class SmartContract
         if ($function->constant) {
             return $this->callConstantFunction($function, $data);
         } else {
-            return $this->callNonConstantFunction($function, $data, $gasPrice);
+            return $this->callNonConstantFunction($function, $data, $gasPrice, $value);
         }
     }
 
@@ -173,12 +173,12 @@ class SmartContract
      * @return Hash
      * @throws Exception
      */
-    protected function callNonConstantFunction(StructFunction $function, Byte $data, ?Uint $gasPrice = null)
+    protected function callNonConstantFunction(StructFunction $function, Byte $data, ?Uint $gasPrice = null, ?Uint $value = null)
     {
         $nodeAddress = $this->client->keystore()->getAddress();
         if ($function->payable) {
             // @todo
-            throw new Exception('Can not call payable function.');
+            //throw new Exception('Can not call payable function.');
         }
         // query gas price
         $gasPrice = $gasPrice ?? ($this->client->gasPrice ?? $this->client->eth()->gasPrice());
@@ -187,7 +187,7 @@ class SmartContract
             $nodeAddress,
             $this->address,
             $data,
-            null,
+            $value,
             $gasPrice
         );
         // query gas

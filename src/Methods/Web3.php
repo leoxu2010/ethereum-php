@@ -12,7 +12,7 @@ class Web3 extends AbstractMethods
      */
     public function clientVersion(): string
     {
-        $response = $this->client->send($this->client->request(67, __FUNCTION__, []));
+        $response = $this->_send($this->_request(__FUNCTION__, []));
         return $response;
     }
 
